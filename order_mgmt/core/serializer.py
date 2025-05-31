@@ -5,9 +5,8 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['id', 'user', 'title', 'description']
-        read_only_fields = ['user']
         extra_kwargs = {
             'title': {'required': True, 'allow_blank': False},
             'description': {'required': True, 'allow_blank': False}
         }
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'user']

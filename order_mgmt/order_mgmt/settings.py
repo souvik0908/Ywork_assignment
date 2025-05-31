@@ -24,6 +24,13 @@ SECRET_KEY = 'django-insecure-f0z7zm@g-h@(@wl38tq79^+o&(hd%t3xst0qa&coi6^xl2+jna
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000 
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
 ALLOWED_HOSTS = []
 
@@ -64,10 +71,11 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',  
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
 ]
+
 
 ROOT_URLCONF = 'order_mgmt.urls'
 
@@ -145,13 +153,18 @@ GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 
-# DRF settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
     )
 }
+REDIRECT_URIS = [
+    'http://127.0.0.1:8000/accounts/google/login/callback/',
+    'http://localhost:8000/accounts/google/login/callback/'
+]
 
+REDIRECT_URI = REDIRECT_URIS[0]
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',

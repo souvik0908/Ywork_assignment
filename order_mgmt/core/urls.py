@@ -1,8 +1,10 @@
 from django.urls import path
-from . import views
+from .views import (
+    order_list, create_order,get_token
+)
 
 urlpatterns = [
-    path('oauth2callback/', views.GoogleOAuthCallback.as_view(), name='google-oauth-callback'),
-    path('orders/create/', views.create_order, name='create-order'),
-    path('orders/', views.order_list, name='list-orders'),
+    path('orders/', order_list, name='order-list'),
+    path('orders/create/', create_order, name='order-create'),
+    path('get-token/', get_token, name='get-token'),
 ]
